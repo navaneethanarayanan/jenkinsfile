@@ -4,37 +4,29 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Code checked out successfully'
+                checkout scm
+                echo 'Code checked out!'
             }
         }
-
         stage('Build') {
             steps {
-                sh 'echo Building the project...'
                 sh 'ls -la'
+                sh 'echo Build done!'
             }
         }
-
         stage('Test') {
             steps {
-                sh 'echo Running tests...'
-                sh 'cat codechanges.txt'
+                sh 'echo Tests passed!'
             }
         }
-
         stage('Deploy') {
             steps {
-                sh 'echo Deploying...'
+                sh 'echo Deployed!'
             }
         }
     }
-
     post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+        success { echo 'Success!' }
+        failure { echo 'Failed!' }
     }
 }
