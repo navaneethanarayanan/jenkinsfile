@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Premium Live Chat</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+height:100vh;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+overflow:hidden;
+}
+
+.chat-toggle{
+position:fixed;
+bottom:25px;
+right:25px;
+width:70px;
+height:70px;
+border:none;
+border-radius:50%;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:white;
+font-size:30px;
+cursor:pointer;
+box-shadow:0 10px 30px rgba(0,114,255,.5);
+transition:.3s;
+}
+
+.chat-toggle:hover{
+transform:scale(1.1);
+}
+
+.chat-box{
+position:fixed;
+right:25px;
+bottom:110px;
+width:390px;
+height:650px;
+display:none;
+flex-direction:column;
+backdrop-filter:blur(20px);
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.15);
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 20px 60px rgba(0,0,0,.4);
+animation:pop .3s ease;
+}
+
+@keyframes pop{
+from{transform:scale(.8);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.header{
+padding:18px;
+background:rgba(255,255,255,.05);
+display:flex;
+align-items:center;
+gap:12px;
+color:white;
+}
+
+.avatar{
+width:50px;
+height:50px;
+border-radius:50%;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+}
+
+.status{
+width:10px;
+height:10px;
+background:#22c55e;
+border-radius:50%;
+display:inline-block;
+margin-left:5px;
+}
+
+.messages{
+flex:1;
+padding:20px;
+overflow:auto;
+}
+
+.bot,.user{
+max-width:75%;
+padding:12px 16px;
+margin-bottom:15px;
+border-radius:18px;
+animation:fade .3s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.bot{
+background:rgba(255,255,255,.12);
+color:white;
+}
+
+.user{
+margin-left:auto;
+background:linear-gradient(135deg,#2563eb,#3b82f6);
+color:white;
+}
+
+.time{
+font-size:11px;
+margin-top:5px;
+opacity:.6;
+}
+
+.typing{
+display:flex;
+gap:5px;
+padding:12px;
+width:60px;
+background:rgba(255,255,255,.1);
+border-radius:15px;
+}
+
+.typing span{
+width:8px;
+height:8px;
+background:white;
+border-radius:50%;
+animation:bounce 1s infinite;
+}
+
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-5px)}
+}
+
+.footer{
+padding:15px;
+display:flex;
+gap:10px;
+background:rgba(255,255,255,.05);
+}
+
+.footer input{
+flex:1;
+padding:14px;
+border:none;
+border-radius:15px;
+background:rgba(255,255,255,.1);
+color:white;
+outline:none;
+}
+
+.footer input::placeholder{
+color:#ccc;
+}
+
+.send{
+width:50px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:white;
+font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<button class="chat-toggle" onclick="toggleChat()">💬</button>
+
+<div class="chat-box" id="chat">
+
+<div class="header">
+<div class="avatar">👩</div>
+<div>
+<div>Sarah <span class="status"></span></div>
+<small>Typically replies instantly</small>
+</div>
+</div>
+
+<div class="messages" id="msgs">
+
+<div class="bot">
+👋 Welcome to our support team!
+<div class="time">Now</div>
+</div>
+
+</div>
+
+<div class="footer">
+<input id="msg" placeholder="Type your message...">
+<button class="send" onclick="send()">➤</button>
+</div>
+
+</div>
+
+<script>
+
+function toggleChat(){
+const c=document.getElementById("chat");
+c.style.display=c.style.display==="flex"?"none":"flex";
+}
+
+function send(){
+
+const input=document.getElementById("msg");
+const text=input.value.trim();
+
+if(!text)return;
+
+const msgs=document.getElementById("msgs");
+
+msgs.innerHTML+=`
+<div class="user">
+${text}
+<div class="time">Now</div>
+</div>
+`;
+
+input.value="";
+
+msgs.innerHTML+=`
+<div class="typing" id="typing">
+<span></span>
+<span></span>
+<span></span>
+</div>
+`;
+
+msgs.scrollTop=msgs.scrollHeight;
+
+setTimeout(()=>{
+
+document.getElementById("typing").remove();
+
+msgs.innerHTML+=`
+<div class="bot">
+Thank you for contacting support. We'll assist you shortly.
+<div class="time">Now</div>
+</div>
+`;
+
+msgs.scrollTop=msgs.scrollHeight;
+
+},1500);
+
+}
+</script>
+
+</body>
+</html>
